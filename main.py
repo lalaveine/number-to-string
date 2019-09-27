@@ -12,9 +12,13 @@ basic = {
 
 
 def number_to_string(number: int) -> str:
-    str_number = ''
+    if not check_number(number):
+        print("Закрываю программу...")
+        exit()
 
-    return str_number
+    number = divide_number_to_groups(number)
+    print(number)
+    return number
 
 
 def check_number(number: int) -> bool:
@@ -32,5 +36,4 @@ def divide_number_to_groups(number: int) -> list:
 
 
 num = 206667
-var = check_number(num)
-print('answer: ' + str(var))
+var = number_to_string(num)
