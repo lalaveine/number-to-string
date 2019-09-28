@@ -1,4 +1,5 @@
-last_digit = {
+third_digits_list = {
+    '0': 'ноль',
     '1': 'один',
     '2': 'два',
     '3': 'три',
@@ -10,7 +11,7 @@ last_digit = {
     '9': 'девять',
 }
 
-from_10_to_19 = {
+from_10_to_19_list = {
     '0': 'десять',
     '1': 'одиннадцать',
     '2': 'двенадцать',
@@ -23,7 +24,7 @@ from_10_to_19 = {
     '9': 'девятнадцать',
 }
 
-second_digit = {
+second_digits_list = {
     '2': 'двадцать',
     '3': 'тридцать',
     '4': 'сорок',
@@ -32,6 +33,18 @@ second_digit = {
     '7': 'семьдесят',
     '8': 'восемьдесят',
     '9': 'девяносто',
+}
+
+first_digits_list = {
+    '1': 'сто',
+    '2': 'двести',
+    '3': 'триста',
+    '4': 'четыреста',
+    '5': 'пятьсот',
+    '6': 'шестьсот',
+    '7': 'семьсот',
+    '8': 'восемьсот',
+    '9': 'девятьсот',
 }
 
 def number_to_string(number: int) -> str:
@@ -48,12 +61,34 @@ def number_to_string(number: int) -> str:
         number_of_digits = len(number)
 
         if number_of_digits is 1:
-            number_str = last_digit[number[0]]
+            number_str = third_digits_list[number[0]]
         elif number_of_digits is 2:
-            if number[0] is not '1':
-                number_str = f'{second_digit[number[0]]} {last_digit[number[1]]}'
+            if number[0] is '1':
+                number_str = from_10_to_19_list[number[1]]
             else:
-                number_str = from_10_to_19[number[1]]
+                second_digit = second_digits_list[number[0]]
+
+                third_digit = third_digits_list[number[1]] if number[1] is not '0' else ''
+
+                number_str = f'{second_digit} {third_digit}'.strip()
+
+        elif number_of_digits is 3:
+            first_digit = first_digits_list[number[0]]
+
+            second_digit = ''
+            if number[1] is '1':
+                second_digit = from_10_to_19_list[number[2]]
+            elif number[1] is not '0':
+                second_digit = second_digits_list[number[1]]
+
+            third_digit = ''
+            if number[1] is '1':
+                third_digit = ''
+            elif number[2] is not '0':
+                third_digit = third_digits_list[number[2]]
+
+            first_and_second_digits = f'{first_digit} {second_digit}'.strip()
+            number_str = f'{first_and_second_digits} {third_digit}'.strip()
 
     return number_str
 
@@ -72,5 +107,5 @@ def divide_number_to_groups(number: int) -> list:
 
 
 
-num = 17
+num = 111
 print(number_to_string(num))
