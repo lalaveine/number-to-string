@@ -47,51 +47,41 @@ first_digits_list = {
     '9': 'девятьсот',
 }
 
+last_thousand_list = {
+    '0': 'тысяч',
+    '1': 'одна тысяча',
+    '2': 'две тысячи',
+    '3': 'три тысячи',
+    '4': 'четыре тысячи',
+    '5': 'пять тысяч',
+    '6': 'шесть тысяч',
+    '7': 'семь тысяч',
+    '8': 'восемь тысяч',
+    '9': 'девять тысяч'
+}
+
 def number_to_string(number: int) -> str:
     if not check_number(number):
         print("Закрываю программу...")
         exit()
 
     number = divide_number_to_groups(number)
-    print(number)
-    number_str = None
 
     if len(number) is 1:
-        number = number[0]
-        number_of_digits = len(number)
+        return " ".join(group_to_string(number[0]))
+    elif len(number) is 2:
+        print()
+        group_1 = group_to_string(number[0])
 
-        if number_of_digits is 1:
-            number_str = third_digits_list[number[0]]
-        elif number_of_digits is 2:
-            if number[0] is '1':
-                number_str = from_10_to_19_list[number[1]]
-            else:
-                second_digit = second_digits_list[number[0]]
+        if number[0][-2] is '1':
+            group_1.append(last_thousand_list['0'])
+        else:
+            group_1 = group_to_string(number[0])[:-1]
+            group_1.append(last_thousand_list[number[0][-1]])
 
-                third_digit = third_digits_list[number[1]] if number[1] is not '0' else ''
+        group_2 = group_to_string(number[1])
 
-                number_str = f'{second_digit} {third_digit}'.strip()
-
-        elif number_of_digits is 3:
-            first_digit = first_digits_list[number[0]]
-
-            second_digit = ''
-            if number[1] is '1':
-                second_digit = from_10_to_19_list[number[2]]
-            elif number[1] is not '0':
-                second_digit = second_digits_list[number[1]]
-
-            third_digit = ''
-            if number[1] is '1':
-                third_digit = ''
-            elif number[2] is not '0':
-                third_digit = third_digits_list[number[2]]
-
-            first_and_second_digits = f'{first_digit} {second_digit}'.strip()
-            number_str = f'{first_and_second_digits} {third_digit}'.strip()
-
-    return number_str
-
+        return f'{" ".join(group_1)} {" ".join(group_2)}'
 
 def check_number(number: int) -> bool:
     if number > 999999 or number < 1:
@@ -106,6 +96,37 @@ def divide_number_to_groups(number: int) -> list:
     return list(filter(None, [number[:-3], number[-3:]]))
 
 
+def group_to_string(group: list) -> list:
+    number_of_digits = len(group)
 
-num = 111
+    if number_of_digits is 1:
+        return [third_digits_list[group[0]]]
+    elif number_of_digits is 2:
+        if group[0] is '1':
+            return [from_10_to_19_list[group[1]]]
+        else:
+            second_digit = second_digits_list[group[0]]
+
+            third_digit = third_digits_list[group[1]] if group[1] is not '0' else ''
+
+            return list(filter(None, [second_digit, third_digit]))
+
+    elif number_of_digits is 3:
+        first_digit = first_digits_list[group[0]]
+
+        second_digit = ''
+        if group[1] is '1':
+            second_digit = from_10_to_19_list[group[2]]
+        elif group[1] is not '0':
+            second_digit = second_digits_list[group[1]]
+
+        third_digit = ''
+        if group[1] is '1':
+            third_digit = ''
+        elif group[2] is not '0':
+            third_digit = third_digits_list[group[2]]
+
+        return list(filter(None, [first_digit, second_digit, third_digit]))
+
+num = 999999
 print(number_to_string(num))
