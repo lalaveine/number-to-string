@@ -127,6 +127,3 @@ def group_to_string(group: list) -> list:
             third_digit = third_digits_list[group[2]]
 
         return list(filter(None, [first_digit, second_digit, third_digit]))
-
-num = 999999
-print(number_to_string(num))
