@@ -1,3 +1,5 @@
+from numpy import issubdtype, signedinteger
+
 third_digits_list = {
     '0': 'ноль',
     '1': 'один',
@@ -36,6 +38,7 @@ second_digits_list = {
 }
 
 first_digits_list = {
+    '0': '',
     '1': 'сто',
     '2': 'двести',
     '3': 'триста',
@@ -60,10 +63,10 @@ last_thousand_list = {
     '9': 'девять тысяч'
 }
 
+
 def number_to_string(number: int) -> str:
     if not check_number(number):
-        print("Закрываю программу...")
-        exit()
+        return
 
     number = divide_number_to_groups(number)
 
@@ -73,7 +76,7 @@ def number_to_string(number: int) -> str:
         print()
         group_1 = group_to_string(number[0])
 
-        if number[0][-2] is '1':
+        if len(number[0]) > 1 and number[0][-2] is '1':
             group_1.append(last_thousand_list['0'])
         else:
             group_1 = group_to_string(number[0])[:-1]
@@ -83,9 +86,15 @@ def number_to_string(number: int) -> str:
 
         return f'{" ".join(group_1)} {" ".join(group_2)}'
 
+
 def check_number(number: int) -> bool:
-    if number > 999999 or number < 1:
-        print('Число выходит за пределы допустимых значений.')
+    invalid_types = isinstance(number, str) or isinstance(number, bool) or isinstance(number, float)
+    out_of_valid_range = number > 999999 or number < 1
+    if invalid_types:
+        print('ОШИБКА: Недопустимый тип.')
+        return False
+    elif out_of_valid_range:
+        print('ОШИБКА: Число выходит за пределы допустимых значений.')
         return False
 
     return True
